@@ -1,0 +1,31 @@
+# MATLAB editor and temporary files
+*.asv
+*.m~
+*.mlx~
+*.autosave
+*.bak
+
+# Simulink generated artifacts and caches
+slprj/
+*.slxc
+codegen/
+simulink_cache/
+
+# Generated binaries
+*.mexw64
+*.mexmaci64
+*.mexa64
+*.p
+
+# Local test and coverage artifacts
+coverage/
+test-results/
+*.log
+
+# Packaged distributions: publish source files, not ZIP copies
+*.zip
+
+# Operating-system and Office lock files
+.DS_Store
+Thumbs.db
+~$*
