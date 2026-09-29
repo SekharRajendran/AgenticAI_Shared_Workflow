@@ -10,10 +10,10 @@ productName = [ ...
     "Simulink"
     "5G Toolbox (waveform and EVM reruns)"];
 isLicensed = [ ...
-    license("test", "RF_Toolbox")
-    license("test", "Antenna_Toolbox")
+    exist("rfbudget", "file") == 2
+    exist("dipole", "file") == 2
     license("test", "Simulink")
-    license("test", "5G_Toolbox")];
+    exist("nrCarrierConfig", "file") == 2];
 
 requiredFile = [ ...
     fullfile(packageRoot, "Agentic AI Antenna-to-bits Reference Chain.docx")
@@ -23,7 +23,11 @@ requiredFile = [ ...
     fullfile(packageRoot, "helpers", "CMD240withNF.s2p")
     fullfile(packageRoot, "helpers", "WilkinsonSplitterData.mat")
     fullfile(packageRoot, "RF_TX_Model.slx")
-    fullfile(packageRoot, "RF_TX_Model8.slx")];
+    fullfile(packageRoot, "RF_TX_Model8.slx")
+    fullfile(packageRoot, "RF_TX_Model_MN.slx")
+    fullfile(packageRoot, "openBaselineModel.m")
+    fullfile(packageRoot, "openResolutionModel.m")
+    fullfile(packageRoot, "openMatchingNetworkModel.m")];
 fileAvailable = isfile(requiredFile);
 
 fprintf("Product check:\n");

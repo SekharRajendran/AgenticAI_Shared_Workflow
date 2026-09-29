@@ -20,8 +20,15 @@ Run:
 ```matlab
 StartHere
 run("build12GHzTransmitterRFBudget.m")
+runtests("tests", Tag="Unit")
 ```
 
 Then confirm the budget still uses the 4 GHz IF, 8 GHz LO, 100 MHz bandwidth, -20 dBm input point, `CMD240withNF.s2p`, and `WilkinsonSplitterData.mat`.
 
-If the change affects a model, open the relevant `.slx` file and document the observed behavior. If 5G Toolbox is available, also rerun the waveform/EVM workflow.
+If the change affects a model, also run:
+
+```matlab
+runtests("tests", Tag="Integration")
+```
+
+If 5G Toolbox is available, also rerun the waveform/EVM workflow.

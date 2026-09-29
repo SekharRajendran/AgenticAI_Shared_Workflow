@@ -10,6 +10,10 @@ helpersDir = fullfile(projectRoot, "helpers");
 resultsDir = fullfile(projectRoot, "rf_system_results");
 
 addpath(helpersDir);
+addpath(projectRoot);
+originalFolder = pwd;
+folderCleanup = onCleanup(@() cd(originalFolder));
+cd(helpersDir);
 if ~isfolder(resultsDir)
     mkdir(resultsDir);
 end

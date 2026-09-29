@@ -18,9 +18,10 @@ This is a complete, shareable copy of the original `AgenticAI` workflow folder. 
 2. Review and run `build12GHzTransmitterRFBudget.m`.
 3. Run `buildReferenceRFBudgetAnalyzer.m` to show the budget in RF Budget Analyzer.
 4. Use the PDF and `helpers/WilkinsonSplitterData.mat` to inspect the EM-derived corporate Wilkinson splitter; `helpers/CMD240withNF.s2p` is the LNA/driver Touchstone file used by the budget.
-5. Open `RF_TX_Model.slx` for the baseline RF system model.
-6. Open `RF_TX_Model8.slx` for the alternative array model used to address the EIRP gap.
-7. Compare EIRP, EVM, ACLR, hardware count, and calibration burden against the original objective.
+5. Run `openBaselineModel.m` for the baseline RF system model.
+6. Run `openResolutionModel.m` for the alternative array model used to address the EIRP gap.
+7. Run `openMatchingNetworkModel.m` for the matching-network model; it loads its required EM workspace objects automatically.
+8. Compare EIRP, EVM, ACLR, hardware count, and calibration burden against the original objective.
 
 ## Traceability
 
@@ -34,6 +35,7 @@ This is a complete, shareable copy of the original `AgenticAI` workflow folder. 
 | EM-derived Wilkinson S-parameters | `helpers/WilkinsonSplitterData.mat` |
 | Baseline model | `RF_TX_Model.slx` |
 | Resolution model | `RF_TX_Model8.slx` |
+| Matching-network model | `RF_TX_Model_MN.slx` |
 
 ## Distribution scope
 
@@ -44,3 +46,18 @@ All original source scripts, models, helper files, data files, PDFs, and result 
 This folder includes `.gitignore`, `.gitattributes`, contribution guidance, and GitHub issue/PR templates. Read `GITHUB_PUBLISH.md` before creating a remote repository.
 
 Default to a **private** repository until the redistribution rights for the Word/PDF documentation, S-parameter files, EM data, and model assets are confirmed. See `DISTRIBUTION_NOTICE.md`.
+
+## MATLAB products used
+
+The workflow was validated in MATLAB R2026a Update 2. The following products are used:
+
+| Product | Used for |
+|---|---|
+| MATLAB | Scripts, data loading, and result visualization |
+| RF Toolbox | 12 GHz cascade budget, RF Budget Analyzer, Touchstone (`.s2p`) data, and RF-system analysis |
+| RF Blockset | RF physical-layer blocks in the Simulink transmitter models |
+| Simulink | `RF_TX_Model`, `RF_TX_Model8`, and `RF_TX_Model_MN` |
+| Antenna Toolbox | EM-derived antenna, Wilkinson splitter, and array assets |
+| 5G Toolbox | NR waveform generation and EVM validation in the antenna-to-bits testbench |
+
+RF Toolbox, RF Blockset, Simulink, and Antenna Toolbox are required for the complete workflow. 5G Toolbox is required to rerun the NR waveform and EVM portions; the RF budget and models can still be inspected without it.

@@ -1,2 +1,15 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# Text formats remain readable and use a consistent line ending in Git.
+*.m text eol=lf
+*.md text eol=lf
+*.s2p text eol=lf
+*.csv text eol=lf
+*.txt text eol=lf
+
+# MATLAB, Simulink, and document artifacts are binary.
+*.slx binary
+*.slxc binary
+*.mlx binary
+*.mat binary
+*.docx binary
+*.pdf binary
+*.png binary

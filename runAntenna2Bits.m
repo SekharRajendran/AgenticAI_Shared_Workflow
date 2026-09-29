@@ -1,5 +1,13 @@
 %% Antenna-to-Bits 2026 — IMS Booth Demo (linear, live walkthrough)
 clear; clc; close all
+
+scriptDir = fileparts(mfilename("fullpath"));
+helpersDir = fullfile(scriptDir, "helpers");
+originalFolder = pwd;
+folderCleanup = onCleanup(@() cd(originalFolder));
+addpath(scriptDir);
+addpath(helpersDir);
+cd(helpersDir);
 %% Initial design 4 elements transmitters
 % The first four elements: IF filter+LNA+Tuner+Splitter are representative
 % of 1 tile beamformer. This is followed by a PA and the antenna array,
@@ -11,7 +19,7 @@ fRF = fIF+fLO;
 lambda = physconst("LightSpeed")/fRF;
 BW = 100e6;
 N = 4;
-loadOutWaveforms = 0;
+loadOutWaveforms = true;
 %% Stage 1 - IF filter
 ifFilter = rffilter("Name","IFfilter", FilterType="InverseChebyshev",...
     ResponseType="Bandpass", FilterOrder=5, ...
@@ -21,7 +29,7 @@ ifFilterGP = groupdelay(ifFilter, linspace(-BW*2+fIF, BW*2+fIF, 101));
 figure; plot(linspace(-BW*2+fIF, BW*2+fIF, 101),ifFilterGP); title("IF filter group delay");
 elements(1) = ifFilter;
 %% Stage 2 - LNA
-lnaSparamFileName = "CMD240withNF.s2p";
+lnaSparamFileName = fullfile(helpersDir, "CMD240withNF.s2p");
 lna = amplifier("Name","LNA",...
     Model="sparam",FileName=lnaSparamFileName, ...
     OIP3=28, OP1dB=19, OPsat=22);
@@ -46,10 +54,11 @@ splitterCorporate.GroundPlaneWidth = 0.07;
 figure; show(splitterCorporate)
 figure; layout(splitterCorporate)
 figure; mesh(splitterCorporate,'MaxEdgeLength',lambda/10);
-load WilkinsonSplitterData.mat;
+load(fullfile(helpersDir, "WilkinsonSplitterData.mat"));
 splitterSparam = sparameters(splitterCorporate,[-2*BW 2*BW]+fRF,...
     'SweepOption','interp');
-save('WilkinsonSplitterData.mat','splitterCorporate','splitterSparam');
+save(fullfile(helpersDir, "WilkinsonSplitterData.mat"), ...
+    'splitterCorporate', 'splitterSparam');
 figure; rfplot(splitterSparam); title("Wilkinson corporate splitter S-parameters")
 figure; hold on; rfplot(splitterSparam,2,1); title("Splitter insertion loss"); 
 plot(splitterSparam.Frequencies/1e9,-10*log10(N),'ro-');
@@ -224,7 +233,14 @@ end
 open_system(RF_TX);
 clear outWaveform;
 wvName =wvFileName(Pin, rfAntenna, N);
-Zuc
+if loadOutWaveforms
+    waveformData = load(fullfile(helpersDir, wvName), "outWaveform");
+    outWaveform = waveformData.outWaveform;
+else
+    outWaveform = RF_TX(inWaveform);
+    save(fullfile(helpersDir, wvName), "outWaveform");
+end
+
 % Spectral measurement, power, and EVM
 release(SpectAnalyzer);
 SpectAnalyzer(outWaveform);
@@ -238,8 +254,8 @@ tmp = getMeasurementsData(SpectAnalyzer);
 ACLR=max(tmp.ChannelMeasurements.ACPRLower,tmp.ChannelMeasurements.ACPRUpper);
 disp(['ACLR = ' num2str(ACLR) 'dBc'])
 release(PowMet);
-o
-[evmInfo,~, a~] = hNRDownlinkEVM(...
+[evmInfo,~,~] = hNRDownlinkEVM(...
     tmwavegen.Config,outWaveform,cfg);
-disp(['EVM RMS (at Pin=-20dBm) = ' num2str(evmInfo.PDSCH.OverallEVM.RMS*100) '%']);
+disp(['EVM RMS (at Pin=' num2str(Pin) 'dBm) = ' ...
+    num2str(evmInfo.PDSCH.OverallEVM.RMS*100) '%']);
 % Simulation shows excellent EVM (0.5%), and high linearity (ACPR~-50dBc)

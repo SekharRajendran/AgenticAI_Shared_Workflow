@@ -40,7 +40,7 @@ This builds the same representative path and opens RF Budget Analyzer.
 Use `Antenna2BitsDemoLive.pdf` for the splitter and dipole construction sequence, then open:
 
 ```matlab
-open_system("RF_TX_Model.slx")
+run("openBaselineModel.m")
 ```
 
 The baseline result is about 33 dBm EIRP with low EVM, so it does not meet the EIRP objective.
@@ -50,7 +50,17 @@ The baseline result is about 33 dBm EIRP with low EVM, so it does not meet the E
 Open:
 
 ```matlab
-open_system("RF_TX_Model8.slx")
+run("openResolutionModel.m")
 ```
 
 Compare the higher-element-count model against the baseline. State whether the EIRP and EVM targets are met, and identify the additional hardware and calibration cost.
+
+## 6. Inspect the matching-network alternative
+
+Run:
+
+```matlab
+run("openMatchingNetworkModel.m")
+```
+
+The launcher loads the corporate splitter and patch-array workspace objects required by `RF_TX_Model_MN.slx`.

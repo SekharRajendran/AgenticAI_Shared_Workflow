@@ -25,6 +25,9 @@ test-results/
 # Packaged distributions: publish source files, not ZIP copies
 *.zip
 
+# Do not vendor a nested local copy of this same project.
+/AgenticAI_Shared_Workflow/
+
 # Operating-system and Office lock files
 .DS_Store
 Thumbs.db
